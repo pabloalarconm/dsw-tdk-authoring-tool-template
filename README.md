@@ -22,18 +22,15 @@
 
 ## Changelog
 
+### 1.0.1
+
+- Github URL changed to Github Pages
+- DCAT types included for FDP submission
+
 ### 1.0.0
 
 - Template for Github and FAIRsharing submision.
 - Compliance with FTR 1.2.0
-
-Jinja2-based template for authoring and registering FAIR Assessment Components
-
-## Changelog
-
-### 1.0.0
-
-- Initial version of FAIR Assessment Authoring Tool template
 
 ## License
 

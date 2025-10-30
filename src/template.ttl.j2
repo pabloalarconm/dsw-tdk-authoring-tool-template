@@ -13,8 +13,8 @@
 @prefix sio: <http://semanticscience.org/resource/> .
 @prefix adms: <http://www.w3.org/ns/adms#> .
 
-{% if map.GeneralMap.Abbreviation %}<https://github.com/OSTrails/assessment-component-metadata-records/tree/main/{{map.GeneralMap.valuesTagMap.name}}/{{map.GeneralMap.Abbreviation}}.ttl> a {{ "ftr:Benchmark" if map.GeneralMap.valuesTagMap.name == "benchmark" else "dqv:Metric" if map.GeneralMap.valuesTagMap.name == "metric" else "ftr:Test" if map.GeneralMap.valuesTagMap.name == "test" else "ftr:Algorithm" if map.GeneralMap.valuesTagMap.name == "algorithm" else "dcat:DataService" }} ;{% endif %}
-    {% if map.GeneralMap.Abbreviation %}dcterms:identifier "https://github.com/OSTrails/assessment-component-metadata-records/tree/main/{{map.GeneralMap.valuesTagMap.name}}/{{map.GeneralMap.Abbreviation}}.ttl"^^xsd:string ;{% endif %}
+{% if map.GeneralMap.Abbreviation %}<https://ostrails.github.io/assessment-component-metadata-records/tree/main/{{map.GeneralMap.valuesTagMap.name}}/{{map.GeneralMap.Abbreviation}}.ttl> a {{ "ftr:Benchmark, dcat:Resource" if map.GeneralMap.valuesTagMap.name == "benchmark" else "ftr:Metric, dqv:Metric, dcat:Resource" if map.GeneralMap.valuesTagMap.name == "metric" else "ftr:Test, dcat:DataService" if map.GeneralMap.valuesTagMap.name == "test" else "ftr:Algorithm, dcat:DataService" if map.GeneralMap.valuesTagMap.name == "algorithm" else "dcat:DataService" }} ;{% endif %}
+    {% if map.GeneralMap.Abbreviation %}dcterms:identifier "https://ostrails.github.io/assessment-component-metadata-records/tree/main/{{map.GeneralMap.valuesTagMap.name}}/{{map.GeneralMap.Abbreviation}}.ttl"^^xsd:string ;{% endif %}
     {% if map.GeneralMap.Title %}dcterms:title "{{map.GeneralMap.Title}}"^^xsd:string ;
     rdfs:label "{{map.GeneralMap.Abbreviation}}"^^xsd:string ;{% endif %}
     {% if map.GeneralMap.Abbreviation %}vivo:abbreviation "{{map.GeneralMap.Abbreviation}}"^^xsd:string ;{% endif %}

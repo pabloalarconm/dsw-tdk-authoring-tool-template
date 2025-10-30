@@ -1,7 +1,7 @@
 {
     "templateId": "fair-assessment-authoring-template",
     "organizationId": "ostrails.fair",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "name": "FAIR Assessment Authoring Tool",
     "description": "Jinja2-based template for authoring and registering FAIR Assessment Components",
     "license": "CC0",
