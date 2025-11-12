@@ -353,8 +353,8 @@
     {%- do valuesFACMap.update({key:{}}) -%}
 
     {%- set full_metric_fs_key = fac_key + '.' + key + '.' + uuids.MetricURLUuid -%}
-    {# {%- set full_metric_manual_key = fac_key + '.' + key + '.' + uuids.??? -%} #}
-    {# {%- set full_benchmark_fs_key = fac_key + '.' + key + '.' + uuids.??? -%} #}
+    {%- set full_metric_manual_key = fac_key + '.' + key + '.' + uuids.MetricURLManualUuid -%}
+    {%- set full_benchmark_fs_key = fac_key + '.' + key + '.' + uuids.BenchmarkURLUuid -%}
     {%- set full_benchmark_manual_key = fac_key + '.' + key + '.' + uuids.BenchmarkURLManualUuid -%}
     {%- set full_test_manual_key = fac_key + '.' + key + '.' + uuids.TestURLManualUuid -%}
 
@@ -363,7 +363,17 @@
         {%- set entry = repliesMap[full_test_manual_key] -%}
         {%- if entry.value and 'value' in entry.value -%}
                 {%- do valuesFACMap[key].update({
-                    "test_URL": entry.value.value
+                    "test_url": entry.value.value
+                }) -%}
+        {%- endif -%}
+    {%- endif -%}
+
+    {# Metric Manual #}
+    {%- if full_metric_manual_key in repliesMap -%}
+        {%- set entry = repliesMap[full_metric_manual_key] -%}
+        {%- if entry.value and 'value' in entry.value -%}
+                {%- do valuesFACMap[key].update({
+                    "metric_url": entry.value.value
                 }) -%}
         {%- endif -%}
     {%- endif -%}
@@ -374,7 +384,7 @@
         {%- set entry = repliesMap[full_benchmark_manual_key] -%}
         {%- if entry.value and 'value' in entry.value -%}
                 {%- do valuesFACMap[key].update({
-                    "benchmark_URL": entry.value.value
+                    "benchmark_url": entry.value.value
                 }) -%}
         {%- endif -%}
     {%- endif -%}
@@ -395,7 +405,7 @@
 
         {%- set parts = extracted.split(';') -%}
         {%- set mname = parts[0].strip() -%}
-        {%- set mdoi  = parts[1].strip() if parts|length > 1 else '' -%}
+        {%- set murl  = parts[1].strip() if parts|length > 1 else '' -%}
 
         {%- set mid = (entry.value.value.id | int)
                     if entry.value and entry.value.value and entry.value.value.id is defined
@@ -404,9 +414,53 @@
         {%- do valuesFACMap[key].update({
             "metric_id": mid,
             "metric_name": mname,
-            "metric_doi": mdoi
+            "metric_url": murl
         }) -%}
     {%- endif -%}
+
+    {# Benchmark FS #}
+    {%- if full_benchmark_fs_key in repliesMap -%}
+        {%- set entry = repliesMap[full_benchmark_fs_key] -%}
+        {%- set raw = entry.value.value.value
+            if entry.value and entry.value.value and entry.value.value.value is defined
+            else '' -%}
+
+        {%- set extracted = raw -%}
+        {%- if '**' in raw -%}
+            {%- set start = raw.find('**') + 2 -%}
+            {%- set end   = raw.find('**', start) if raw.find('**', start) != -1 else raw|length -%}
+            {%- set extracted = raw[start:end] -%}
+        {%- endif -%}
+
+        {%- set parts = extracted.split(';') -%}
+        {%- set mname = parts[0].strip() -%}
+        {%- set murl  = parts[1].strip() if parts|length > 1 else '' -%}
+
+        {%- set mid = (entry.value.value.id | int)
+                    if entry.value and entry.value.value and entry.value.value.id is defined
+                    else '' -%}
+
+        {%- do valuesFACMap[key].update({
+            "benchmark_id": mid,
+            "benchmark_name": mname,
+            "benchmark_url": murl
+        }) -%}
+    {%- endif -%}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 {%- endfor -%}
 
@@ -536,107 +590,107 @@
   uuids.FAIRPrinciples_FUuid : {
       "id": 6269,
       "name": "FAIR Principles - Findable",
-      "doi": "https://w3id.org/fair/principles/terms/F"
+      "url": "https://w3id.org/fair/principles/terms/F"
   },
   uuids.FAIRPrinciples_AUuid : {
       "id": 6270,
       "name": "FAIR Principles - Accessible",
-      "doi": "https://w3id.org/fair/principles/terms/A"
+      "url": "https://w3id.org/fair/principles/terms/A"
   },
   uuids.FAIRPrinciples_IUuid : {
       "id": 6271,
       "name": "FAIR Principles - Interoperable",
-      "doi": "https://w3id.org/fair/principles/terms/I"
+      "url": "https://w3id.org/fair/principles/terms/I"
   },
   uuids.FAIRPrinciples_RUuid : {
       "id": 6272,
       "name": "FAIR Principles - Reusable",
-      "doi": "https://w3id.org/fair/principles/terms/R"
+      "url": "https://w3id.org/fair/principles/terms/R"
   },
   uuids.FAIRPrinciples_F1Uuid : {
       "id": 6273,
       "name": "FAIR Principles F1: (Meta)data are assigned globally unique and persistent identifiers",
-      "doi": "https://w3id.org/fair/principles/terms/F1"
+      "url": "https://w3id.org/fair/principles/terms/F1"
   },
   uuids.FAIRPrinciples_F2Uuid : {
       "id": 6276,
       "name": "FAIR Principles F2: Data are described with rich metadata",
-      "doi": "https://w3id.org/fair/principles/terms/F2"
+      "url": "https://w3id.org/fair/principles/terms/F2"
   },
   uuids.FAIRPrinciples_F3Uuid : {
       "id": 6277,
       "name": "FAIR Principles F3: Metadata clearly and explicitly include the identifier of the data they describe",
-      "doi": "https://w3id.org/fair/principles/terms/F3"
+      "url": "https://w3id.org/fair/principles/terms/F3"
   },
   uuids.FAIRPrinciples_F4Uuid : {
       "id": 6278,
       "name": "FAIR Principles F4: (meta)data are registered or indexed in a searchable resource",
-      "doi": "https://w3id.org/fair/principles/terms/F4"
+      "url": "https://w3id.org/fair/principles/terms/F4"
   },
   uuids.FAIRPrinciples_A1Uuid : {
       "id": 6293,
       "name": "FAIR Principles A1: (meta)data are retrievable by their identifier using a standardized communications protocol",
-      "doi": "https://w3id.org/fair/principles/terms/A1"
+      "url": "https://w3id.org/fair/principles/terms/A1"
   },
   uuids.FAIRPrinciples_A2Uuid : {
       "id": 6296,
       "name": "FAIR Principles A2: metadata are accessible, even when the data are no longer available",
-      "doi": "https://w3id.org/fair/principles/terms/A2"
+      "url": "https://w3id.org/fair/principles/terms/A2"
   },
   uuids.FAIRPrinciples_I2Uuid : {
       "id": 6298,
       "name": "FAIR Principles I2: (meta)data use vocabularies that follow FAIR principles",
-      "doi": "https://w3id.org/fair/principles/terms/I2"
+      "url": "https://w3id.org/fair/principles/terms/I2"
   },
   uuids.FAIRPrinciples_I1Uuid : {
       "id": 6297,
       "name": "FAIR Principles I1: (meta)data use a formal, accessible, shared, and broadly applicable language for knowledge representation",
-      "doi": "https://w3id.org/fair/principles/terms/I1"
+      "url": "https://w3id.org/fair/principles/terms/I1"
   },
   uuids.FAIRPrinciples_I3Uuid : {
       "id": 6299,
       "name": "FAIR Principles I3: (meta)data include qualified references to other (meta)data",
-      "doi": "https://w3id.org/fair/principles/terms/I3"
+      "url": "https://w3id.org/fair/principles/terms/I3"
   },
   uuids.FAIRPrinciples_R1Uuid : {
       "id": 6312,
       "name": "FAIR Principles R1: meta(data) are richly described with a plurality of accurate and relevant attributes",
-      "doi": "https://w3id.org/fair/principles/terms/R1"
+      "url": "https://w3id.org/fair/principles/terms/R1"
   },
   uuids.FAIRPrinciples_F1GUIDUuid : {
       "id": 6274,
       "name": "FAIR Principles F1-GUID: (Meta)data are assigned globally unique identifiers",
-      "doi": "https://doi.org/10.25504/FAIRsharing.b7f1ab"
+      "url": "https://doi.org/10.25504/FAIRsharing.b7f1ab"
   },
   uuids.FAIRPrinciples_F1PIDUuid : {
       "id": 6275,
       "name": "FAIR Principles F1-PID: (Meta)data are assigned persistent identifiers",
-      "doi": "https://doi.org/10.25504/FAIRsharing.e226cb"
+      "url": "https://doi.org/10.25504/FAIRsharing.e226cb"
   },
   uuids.FAIRPrinciples_A1_1Uuid : {
       "id": 6294,
       "name": "FAIR Principles A1.1: the protocol is open, free, and universally implementable",
-      "doi": "https://w3id.org/fair/principles/terms/A1.1"
+      "url": "https://w3id.org/fair/principles/terms/A1.1"
   },
   uuids.FAIRPrinciples_A1_2Uuid : {
       "id": 6295,
       "name": "FAIR Principles A1.2: the protocol allows for an authentication and authorization procedure, where necessary",
-      "doi": "https://w3id.org/fair/principles/terms/A1.2"
+      "url": "https://w3id.org/fair/principles/terms/A1.2"
   },
   uuids.FAIRPrinciples_R1_2Uuid : {
       "id": 6313,
       "name": "FAIR Principles R1.2: (meta)data are associated with detailed provenance",
-      "doi": "https://w3id.org/fair/principles/terms/R1.2"
+      "url": "https://w3id.org/fair/principles/terms/R1.2"
   },
   uuids.FAIRPrinciples_R1_3Uuid : {
       "id": 6314,
       "name": "FAIR Principles R1.3: (meta)data meet domain-relevant community standards",
-      "doi": "https://w3id.org/fair/principles/terms/R1.3"
+      "url": "https://w3id.org/fair/principles/terms/R1.3"
   },
   uuids.FAIRPrinciples_R1_1Uuid : {
       "id": 6043,
       "name": "FAIR Principles R1.1: (Meta)data are released with a clear and accessible data usage license",
-      "doi": "https://w3id.org/fair/principles/terms/R1.1"
+      "url": "https://w3id.org/fair/principles/terms/R1.1"
   }
 }-%}
 
@@ -655,107 +709,107 @@
     uuids.FAIRPrinciples4RS_RUuid: {
         "id": 6424,
         "name": "FAIR Principles for Research Software - Reusable",
-        "doi": "https://doi.org/10.25504/FAIRsharing.d2f63c"
+        "url": "https://doi.org/10.25504/FAIRsharing.d2f63c"
     },
     uuids.FAIRPrinciples4RS_IUuid: {
         "id": 6423,
         "name": "FAIR Principles for Research Software - Interoperable",
-        "doi": "https://doi.org/10.25504/FAIRsharing.c72182"
+        "url": "https://doi.org/10.25504/FAIRsharing.c72182"
     },
     uuids.FAIRPrinciples4RS_AUuid: {
         "id": 6422,
         "name": "FAIR Principles for Research Software - Accessible",
-        "doi": "https://doi.org/10.25504/FAIRsharing.03c2d1"
+        "url": "https://doi.org/10.25504/FAIRsharing.03c2d1"
     },
     uuids.FAIRPrinciples4RS_FUuid: {
         "id": 6421,
         "name": "FAIR Principles for Research Software - Findable",
-        "doi": "https://doi.org/10.25504/FAIRsharing.392c4f"
+        "url": "https://doi.org/10.25504/FAIRsharing.392c4f"
     },
     uuids.FAIRPrinciples4RS_R1Uuid: {
         "id": 6437,
         "name": "FAIR Principles for Research Software - R1. Software is described with a plurality of accurate and relevant attributes",
-        "doi": "https://doi.org/10.25504/FAIRsharing.9bf822"
+        "url": "https://doi.org/10.25504/FAIRsharing.9bf822"
     },
     uuids.FAIRPrinciples4RS_R2Uuid: {
         "id": 6440,
         "name": "FAIR Principles for Research Software - R2. Software includes qualified references to other software",
-        "doi": "https://doi.org/10.25504/FAIRsharing.cda381"
+        "url": "https://doi.org/10.25504/FAIRsharing.cda381"
     },
     uuids.FAIRPrinciples4RS_R3Uuid: {
         "id": 6441,
         "name": "FAIR Principles for Research Software - R3. Software meets domain-relevant community standards",
-        "doi": "https://doi.org/10.25504/FAIRsharing.60a40f"
+        "url": "https://doi.org/10.25504/FAIRsharing.60a40f"
     },
     uuids.FAIRPrinciples4RS_I1Uuid: {
         "id": 6435,
         "name": "FAIR Principles for Research Software - I1. Software reads, writes and exchanges data in a way that meets domain-relevant community standards",
-        "doi": "https://doi.org/10.25504/FAIRsharing.c889a8"
+        "url": "https://doi.org/10.25504/FAIRsharing.c889a8"
     },
     uuids.FAIRPrinciples4RS_I2Uuid: {
         "id": 6436,
         "name": "FAIR Principles for Research Software - I2. Software includes qualified references to other objects",
-        "doi": "https://doi.org/10.25504/FAIRsharing.6d7a69"
+        "url": "https://doi.org/10.25504/FAIRsharing.6d7a69"
     },
     uuids.FAIRPrinciples4RS_A1Uuid: {
         "id": 6431,
         "name": "FAIR Principles for Research Software - A1. Software is retrievable by its identifier using a standardized communications protocol",
-        "doi": "https://doi.org/10.25504/FAIRsharing.b93697"
+        "url": "https://doi.org/10.25504/FAIRsharing.b93697"
     },
     uuids.FAIRPrinciples4RS_A1_1Uuid: {
         "id": 6432,
         "name": "FAIR Principles for Research Software - A1.1. The protocol is open, free, and universally implementable",
-        "doi": "https://doi.org/10.25504/FAIRsharing.6fff5e"
+        "url": "https://doi.org/10.25504/FAIRsharing.6fff5e"
     },
     uuids.FAIRPrinciples4RS_A1_2Uuid: {
         "id": 6433,
         "name": "FAIR Principles for Research Software - A1.2. The protocol allows for an authentication and authorization procedure, where necessary",
-        "doi": "https://doi.org/10.25504/FAIRsharing.0c61dd"
+        "url": "https://doi.org/10.25504/FAIRsharing.0c61dd"
     },
     uuids.FAIRPrinciples4RS_A2Uuid: {
         "id": 6434,
         "name": "FAIR Principles for Research Software - A2. Metadata are accessible, even when the software is no longer available",
-        "doi": "https://doi.org/10.25504/FAIRsharing.8367a5"
+        "url": "https://doi.org/10.25504/FAIRsharing.8367a5"
     },
     uuids.FAIRPrinciples4RS_F1Uuid: {
         "id": 6425,
         "name": "FAIR Principles for Research Software - F1. Software is assigned a globally unique and persistent identifier",
-        "doi": "https://doi.org/10.25504/FAIRsharing.99299d"
+        "url": "https://doi.org/10.25504/FAIRsharing.99299d"
     },
     uuids.FAIRPrinciples4RS_F2Uuid: {
         "id": 6428,
         "name": "FAIR Principles for Research Software - F2. Software is described with rich metadata",
-        "doi": "https://doi.org/10.25504/FAIRsharing.a712f1"
+        "url": "https://doi.org/10.25504/FAIRsharing.a712f1"
     },
     uuids.FAIRPrinciples4RS_F3Uuid: {
         "id": 6429,
         "name": "FAIR Principles for Research Software - F3. Metadata clearly and explicitly include the identifier of the software they describe",
-        "doi": "https://doi.org/10.25504/FAIRsharing.9d893d"
+        "url": "https://doi.org/10.25504/FAIRsharing.9d893d"
     },
     uuids.FAIRPrinciples4RS_F4Uuid: {
         "id": 6430,
         "name": "FAIR Principles for Research Software - F4. Metadata are FAIR, searchable and indexable",
-        "doi": "https://doi.org/10.25504/FAIRsharing.aeef8a"
+        "url": "https://doi.org/10.25504/FAIRsharing.aeef8a"
     },
     uuids.FAIRPrinciples4RS_R1_2Uuid: {
         "id": 6439,
         "name": "FAIR Principles for Research Software - R1.2. Software is associated with detailed provenance",
-        "doi": "https://doi.org/10.25504/FAIRsharing.9ca8a1"
+        "url": "https://doi.org/10.25504/FAIRsharing.9ca8a1"
     },
     uuids.FAIRPrinciples4RS_R1_1Uuid: {
         "id": 6438,
         "name": "FAIR Principles for Research Software - R1.1. Software is given a clear and accessible license",
-        "doi": "https://doi.org/10.25504/FAIRsharing.95c69f"
+        "url": "https://doi.org/10.25504/FAIRsharing.95c69f"
     },
     uuids.FAIRPrinciples4RS_F1_1Uuid: {
         "id": 6426,
         "name": "FAIR Principles for Research Software - F1.1. Components of the software representing levels of granularity are assigned distinct identifiers",
-        "doi": "https://doi.org/10.25504/FAIRsharing.378ec7"
+        "url": "https://doi.org/10.25504/FAIRsharing.378ec7"
     },
     uuids.FAIRPrinciples4RS_F1_2Uuid: {
         "id": 6427,
         "name": "FAIR Principles for Research Software - F1.2. Different versions of the software are assigned distinct identifiers",
-        "doi": "https://doi.org/10.25504/FAIRsharing.656e6c"
+        "url": "https://doi.org/10.25504/FAIRsharing.656e6c"
     }
 }-%}
 

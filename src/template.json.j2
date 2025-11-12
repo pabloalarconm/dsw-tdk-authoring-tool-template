@@ -33,9 +33,9 @@
 
 {# Test #}
 {%- for key, val in map.GeneralMap.valuesFACMap.items() -%}
-    {%- if val["test_URL"] is defined -%}
+    {%- if val["test_url"] is defined -%}
       {%- do metadata.associated_tests.append({
-          "url": val["test_URL"] | default("")
+          "url": val["test_url"] | default("")
       }) -%}
     {%- endif -%}
 {%- endfor -%}

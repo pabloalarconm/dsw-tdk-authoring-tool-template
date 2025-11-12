@@ -22,6 +22,11 @@
 
 ## Changelog
 
+### 1.1.0
+
+- Metrics include Benchmark URL at Turtle
+- non-DOI Metric/FAIR Principles URLs added at Turtle
+
 ### 1.0.1
 
 - Github URL changed to Github Pages
