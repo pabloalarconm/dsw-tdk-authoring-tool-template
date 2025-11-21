@@ -22,6 +22,14 @@
 
 ## Changelog
 
+### 1.3.0
+
+- Minor error with FAIR Principles in Turtle serialization.
+
+### 1.2.0
+
+- Landing page URL as dcterms:identifier in Turtle
+
 ### 1.1.0
 
 - Metrics include Benchmark URL at Turtle
