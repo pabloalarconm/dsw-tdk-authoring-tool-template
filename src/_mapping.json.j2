@@ -170,17 +170,6 @@
 
 {%- set valuesOrganisationMap = {} -%}
 
-{%- set role_options = {
-
-    uuids.PublisherUuid: {
-                    "role_label": "collaborates on"
-                },
-    uuids.CreatorUuid:{
-                    "role_label": "maintains"
-
-    }
-}-%}
-
 {%- for key in OrganisationMap -%}
 
     {%- do valuesOrganisationMap.update({key:{}}) -%}
@@ -264,25 +253,6 @@
         {%- endfor -%}
         {%- do valuesOrganisationMap[key].update({"organisation_type_ids": ids}) -%}
     {%- endif -%}
-    {%- endif -%}
-
-    {# Role #}
-    {%- set entry_role = repliesMap[full_key_org_role] -%}
-    {%- if full_key_org_role in repliesMap and 'value' in repliesMap[full_key_org_role] -%}
-
-        {%- for do in entry_role.value.value -%}
-            {%- for k, v in role_options.items() -%}
-                {%- if do == k -%}
-
-                    {%- if 'role_labels' not in valuesOrganisationMap[key] -%}
-                        {%- do valuesOrganisationMap[key].update({'role_labels': []}) -%}
-                    {%- endif -%}
-
-                    {%- do valuesOrganisationMap[key]['role_labels'].append(v['role_label']) -%}
-
-                {%- endif -%}
-            {%- endfor -%}
-        {%- endfor -%}
     {%- endif -%}
 
 {%- endfor -%}
@@ -373,6 +343,7 @@
         {%- set entry = repliesMap[full_metric_manual_key] -%}
         {%- if entry.value and 'value' in entry.value -%}
                 {%- do valuesFACMap[key].update({
+                    "metric_id": entry.value.value,
                     "metric_url": entry.value.value
                 }) -%}
         {%- endif -%}
@@ -384,6 +355,7 @@
         {%- set entry = repliesMap[full_benchmark_manual_key] -%}
         {%- if entry.value and 'value' in entry.value -%}
                 {%- do valuesFACMap[key].update({
+                    "benchmark_id": entry.value.value,
                     "benchmark_url": entry.value.value
                 }) -%}
         {%- endif -%}
@@ -446,21 +418,6 @@
             "benchmark_url": murl
         }) -%}
     {%- endif -%}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 {%- endfor -%}
 

@@ -22,6 +22,14 @@
 
 ## Changelog
 
+### 1.4.1
+
+- RDF syntax bug from `1.4.0` fixed.
+
+### 1.4.0
+
+- Lack of organisation and metric ID uses FAIRshairng ID.
+
 ### 1.3.0
 
 - Minor error with FAIR Principles in Turtle serialization.
